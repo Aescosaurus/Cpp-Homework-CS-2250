@@ -22,6 +22,11 @@ void DrawIscTri( int size );
 void DrawHourglass( int size );
 // Draws a diamond on the screen.
 void DrawDiamond( int size );
+// Draws '*' or ' ' based on x position.
+void DrawCharBasedOnX( int x,int starSub,int width );
+// Add or remove stars 
+void UpdateStarCount( int& curStars,bool addOrRemove,
+	int starDelta );
 
 int main()
 {
@@ -97,7 +102,6 @@ void CheckUserInput( int& command,int& size )
 	// Prompt the user for their command and read it.
 	cout << "Please pick a command(1-6): ";
 	cin >> command;
-	cout << endl;
 
 	// If it's a shape ask for size, if the command is
 	//  invalid keep asking until a valid one is given.
@@ -190,15 +194,7 @@ void DrawIscTri( int size )
 
 			// Make sure we have empty buffers on the sides
 			//  so it doesn't draw a square.
-			if( x >= STAR_SUB &&
-				x < BASE - STAR_SUB )
-			{
-				cout << '*';
-			}
-			else
-			{
-				cout << ' ';
-			}
+			DrawCharBasedOnX( x,STAR_SUB,BASE );
 		}
 
 		// Draw 2 more stars each level, print newline.
@@ -227,27 +223,12 @@ void DrawHourglass( int size )
 			const int STAR_SUB = ( BASE - curStars ) / 2;
 
 			// Only draw stars in the middle, not sides.
-			if( x >= STAR_SUB &&
-				x < BASE - STAR_SUB )
-			{
-				cout << '*';
-			}
-			else
-			{
-				cout << ' ';
-			}
+			DrawCharBasedOnX( x,STAR_SUB,BASE );
 		}
 
 		// Remove stars if we're above the middle, add
 		//  stars if we're after it.
-		if( y < HALFWAY )
-		{
-			curStars -= STAR_DELTA;
-		}
-		else
-		{
-			curStars += STAR_DELTA;
-		}
+		UpdateStarCount( curStars,y >= HALFWAY,STAR_DELTA );
 		cout << endl;
 	}
 }
@@ -274,26 +255,49 @@ void DrawDiamond( int size )
 			const int STAR_SUB = ( WIDTH - curStars ) / 2;
 
 			// Only draw stars in the middle, not sides.
-			if( x >= STAR_SUB &&
-				x < WIDTH - STAR_SUB )
-			{
-				cout << '*';
-			}
-			else
-			{
-				cout << ' ';
-			}
+			DrawCharBasedOnX( x,STAR_SUB,WIDTH );
 		}
 		// Add or remove stars based on y.  Kind of like
 		//  an inside out hourglass.
-		if( y < HALFWAY )
-		{
-			curStars += STAR_DELTA;
-		}
-		else
-		{
-			curStars -= STAR_DELTA;
-		}
+		UpdateStarCount( curStars,y < HALFWAY,STAR_DELTA );
 		cout << endl;
+	}
+}
+
+// Draw a '*' or a ' ' based on x position and buffer
+//  characters required on the edges.
+// x: Current x position on screen.
+// starSub: Buffer space needed on the edges.
+// width: Width/base/size of object being drawn.
+void DrawCharBasedOnX( int x,int starSub,int width )
+{
+	// Draw stars in the center and spaces on the outside.
+	if( x >= starSub &&
+		x < width - starSub )
+	{
+		cout << '*';
+	}
+	else
+	{
+		cout << ' ';
+	}
+}
+
+// Update current number of stars by delta based on whether
+//  we should add or remove.
+// curStars: Reference to current star count.
+// addOrRemove: Whether to add or remove starDelta.
+// starDelta: Number of stars to add/remove.
+void UpdateStarCount( int& curStars,bool addOrRemove,
+	int starDelta )
+{
+	// If add, add stars if remove, remove them.
+	if( addOrRemove )
+	{
+		curStars += starDelta;
+	}
+	else
+	{
+		curStars -= starDelta;
 	}
 }
