@@ -11,7 +11,7 @@ void PrintMenu();
 // Reads user choices into command and size.
 void CheckUserInput( int& command,int& size );
 // Ask user what size shape to draw.
-void PromptForSize( int& size );
+void PromptForSize( int& size,int command );
 // Draws a square to the screen with specified size.
 void DrawSquare( int size );
 // Draws a right triangle to the screen with size.
@@ -27,6 +27,8 @@ void DrawCharBasedOnX( int x,int starSub,int width );
 // Add or remove stars 
 void UpdateStarCount( int& curStars,bool addOrRemove,
 	int starDelta );
+// Tells the user what they selected and asks for a size.
+void OutputCommandQuestion( int command );
 
 int main()
 {
@@ -36,6 +38,9 @@ int main()
 	// Draw shapes until the user asks to quit.
 	while( HandleMainLoop() );
 
+	cout << "Thank you for using our application!  "
+		<< "Good-bye!";
+
 	return( 0 );
 }
 
@@ -44,9 +49,11 @@ int main()
 void PrintWelcomeMessage()
 {
 	// Say welcome to the user.
-	cout << "Welcome!  This program will draw different "
-		<< "shapes for you!" << endl;
-	cout << "Select an option to get started:" << endl;
+	cout << "Welcome to the shape renderer!" << endl;
+	cout << "You can draw a few different shapes at a "
+		<< "variety of sizes!" << endl;
+	cout << "*********************************************"
+		<< "***********************************" << endl;
 }
 
 // Shows the menu and reads in user input then prints
@@ -83,13 +90,16 @@ bool HandleMainLoop()
 void PrintMenu()
 {
 	// Print a nifty menu with all the options.
-	cout << "-----Menu-----" << endl;
-	cout << "1. Square" << endl;
-	cout << "2. Right Triangle" << endl;
-	cout << "3. Isosceles Triangle" << endl;
-	cout << "4. Hourglass" << endl;
-	cout << "5. Diamond" << endl;
-	cout << "6. Quit(exit the application)" << endl;
+	cout << "* Please select a menu option(1 - 6) :"
+		<< endl;
+	cout << "* 1 - Square" << endl;
+	cout << "* 2 - Right Triangle" << endl;
+	cout << "* 3 - Isosceles Triangle" << endl;
+	cout << "* 4 - Hourglass" << endl;
+	cout << "* 5 - Diamond" << endl;
+	cout << "* 6 - Quit(exit the application)" << endl;
+	cout << "*********************************************"
+		<< "***********************************" << endl;
 }
 
 // Ask the user to pick an option, then read in their
@@ -100,7 +110,7 @@ void PrintMenu()
 void CheckUserInput( int& command,int& size )
 {
 	// Prompt the user for their command and read it.
-	cout << "Please pick a command(1-6): ";
+	cout << "Please select a menu option(1-6)" << endl;
 	cin >> command;
 
 	// If it's a shape ask for size, if the command is
@@ -108,13 +118,13 @@ void CheckUserInput( int& command,int& size )
 	switch( command )
 	{
 	case 1: case 2: case 3: case 4: case 5:
-		PromptForSize( size ); // Get size of shape.
+		PromptForSize( size,command ); // Get size of shape.
 		break;
 	case 6: // User wants to quit, do nothing.
 		break;
 	default: // Keep retrying until result is valid.
-		cout << "Invalid command, please try again!"
-			<< endl;
+		cout << "You have not selected a valid menu "
+			<< "option, please try again." << endl;
 		CheckUserInput( command,size );
 		break;
 	}
@@ -123,18 +133,19 @@ void CheckUserInput( int& command,int& size )
 // Asks user how big to draw some shape and ensures the
 //  value inputted is between 1 and 20.
 // size: How big to draw shape.
-void PromptForSize( int& size )
+void PromptForSize( int& size,int command )
 {
 	// Prompt user to input a size.
-	cout << "Please pick a size(1-20): ";
+	OutputCommandQuestion( command );
 	cin >> size;
 	cout << endl;
 
 	// Keep asking until the user gives something valid.
 	if( size < 1 || size > 20 )
 	{
-		cout << "Invalid size, please retry!" << endl;
-		PromptForSize( size );
+		cout << "You have not selected an appropriate "
+			<< "size, please try again." << endl;
+		PromptForSize( size,command );
 	}
 }
 
@@ -299,5 +310,37 @@ void UpdateStarCount( int& curStars,bool addOrRemove,
 	else
 	{
 		curStars -= starDelta;
+	}
+}
+
+// Asks the user which size to make the shape.
+// command: Shape chosen (it matters).
+void OutputCommandQuestion( int command )
+{
+	// Print the right question based on  the command.
+	switch( command )
+	{
+	case 1:
+		cout << "You have selected a square!  "
+			<< "What size should your square be (1-20)?";
+		break;
+	case 2:
+		cout << "You have selected a right triangle!  "
+			<< "What size should your right triangle be "
+			<< "(1-20)?";
+		break;
+	case 3:
+		cout << "You have selected a isosceles triangle!  "
+			<< "What size should your isosceles triangle "
+			<< "be (1-20)?";
+		break;
+	case 4:
+		cout << "You have selected an hourglass!  What "
+			<< "size should your hourglass be (1-20)?";
+		break;
+	case 5:
+		cout << "You have selected an diamond!  What size "
+			<< "should your diamond be (1-20)?" << endl;
+		break;
 	}
 }
