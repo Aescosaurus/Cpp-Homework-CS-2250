@@ -22,6 +22,14 @@ string Encrypt( const string& msg,int shiftVal );
 char ShiftSingleChar( char unencrypted,int shift );
 // Encrypt msg by shift and print it.
 void PrintEncryptedMessage( const string& msg,int shift );
+// Decrypts msg by shift and prints it.
+void PrintDecryptedMessage( const string& msg,int shift );
+// Tries all possible decryption shifts and prints them out.
+void PrintForceDecrypted( const string& msg );
+// Subtracts upper or lowercase letter to turn ascii to 1-26.
+char SubUpperOrLower( char ascii,int character );
+// Adds upper or lowercase letter to turn ascii from 1-26 to actual ascii.
+char AddUpperOrLower( char ascii,int character );
 
 int main()
 {
@@ -31,7 +39,7 @@ int main()
 	// Draw shapes until the user asks to quit.
 	while( HandleMainLoop() );
 
-	cout << "bye";
+	cout << "Thank you Caesar!  See ya!";
 
 	return( 0 );
 }
@@ -65,9 +73,9 @@ bool HandleMainLoop()
 	// Draw shape based on command, or exit if picked.
 	switch( command )
 	{
-	case 1: PrintEncryptedMessage( ; break;
-	case 2: DrawRightTri( size ); break;
-	case 3: DrawIscTri( size ); break;
+	case 1: PrintEncryptedMessage( userMessage,shift ); break;
+	case 2: PrintDecryptedMessage( userMessage,shift ); break;
+	case 3: PrintForceDecrypted( userMessage ); break;
 	case 4: stop = true; break;
 	}
 
@@ -80,7 +88,7 @@ bool HandleMainLoop()
 void PrintMenu()
 {
 	// Print a nifty menu with all the options.
-	cout << "* 1 - Encrypt" << endl;
+	cout << "* 1 - Encrypt a message" << endl;
 	cout << "* 2 - Decrypt a message" << endl;
 	cout << "* 3 - Brute - force decrypt a message" << endl;
 	cout << "* 4 - Quit" << endl;
@@ -97,6 +105,7 @@ void CheckUserInput( int& command,string& message,int& shift )
 	// Prompt the user for their command and read it.
 	cout << "Please make a menu selection (1-4):" << endl;
 	cin >> command;
+	cin.ignore();
 
 	// If it's a shape ask for size, if the command is
 	//  invalid keep asking until a valid one is given.
@@ -107,14 +116,17 @@ void CheckUserInput( int& command,string& message,int& shift )
 		shift = PromptForValue( "Please enter the shift value (1-25):" );
 		break;
 	case 2:
+		message = PromptForMessage( "Please enter the message to decrypt:" );
+		shift = PromptForValue( "Please enter the shift value (1-25):" );
 		break;
 	case 3:
+		message = PromptForMessage( "Please enter the message to decrypt:" );
 		break;
 	case 4: // User wants to quit, do nothing.
 		break;
 	default: // Keep retrying until result is valid.
 		cout << "Invalid choice, ";
-		CheckUserInput( command,message );
+		CheckUserInput( command,message,shift );
 		break;
 	}
 }
@@ -126,7 +138,7 @@ string PromptForMessage( const string& msg )
 	string input; // User's message response.
 
 	// Ask user for and get input.
-	cout << msg;
+	cout << msg << endl;
 	getline( cin,input );
 
 	return( input );
@@ -138,9 +150,14 @@ int PromptForValue( const string& msg )
 	int input; // User inputted value.
 
 	// Ask user for and get value.
-	cout << msg;
+	cout << msg << endl;
 	cin >> input;
 	cin.ignore();
+
+	if( input < 1 || input > 25 )
+	{
+		PromptForValue( msg );
+	}
 
 	return( input );
 }
@@ -167,33 +184,71 @@ string Encrypt( const string& msg,int shiftVal )
 // shift: How much to shift character by.
 char ShiftSingleChar( char unencrypted,int shift )
 {
+	int ascii = int( unencrypted );
 	if( isalpha( unencrypted ) )
 	{
-		if( isupper( unencrypted ) )
-		{
-			unencrypted -= 'A';
-		}
-		else // Lower case.
-		{
-			unencrypted -= 'a';
-		}
+		ascii = SubUpperOrLower( ascii,unencrypted );
 	}
 
 	while( shift > 0 )
 	{
 		--shift;
-		++unencrypted;
+		++ascii;
+		if( ascii > 25 ) ascii = 0;
 	}
 	while( shift < 0 )
 	{
 		++shift;
-		--unencrypted;
+		--ascii;
+		if( ascii < 0 ) ascii = 25;
 	}
 
-	return( unencrypted );
+	return( char( AddUpperOrLower( ascii,unencrypted ) ) );
 }
 
 void PrintEncryptedMessage( const string& msg,int shift )
 {
+	cout << "Encrypted as:" << endl << Encrypt( msg,shift ) << endl;
+}
 
+void PrintDecryptedMessage( const string& msg,int shift )
+{
+	cout << "Decrypted as:" << endl << Encrypt( msg,-shift ) << endl;
+}
+
+void PrintForceDecrypted( const string & msg )
+{
+	cout << "Decrypted as:" << endl;
+	for( int i = 0; i < 25; ++i )
+	{
+		cout << Encrypt( msg,i ) << endl;
+	}
+}
+
+char SubUpperOrLower( char ascii,int character )
+{
+	if( isupper( character ) )
+	{
+		ascii -= int( 'A' );
+	}
+	else // Lower case.
+	{
+		ascii -= int( 'a' );
+	}
+
+	return( ascii );
+}
+
+char AddUpperOrLower( char ascii,int character )
+{
+	if( isupper( character ) )
+	{
+		ascii += int( 'A' );
+	}
+	else // Lower case.
+	{
+		ascii += int( 'a' );
+	}
+
+	return( ascii );
 }
