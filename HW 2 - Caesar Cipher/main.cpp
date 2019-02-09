@@ -30,6 +30,7 @@ void PrintForceDecrypted( const string& msg );
 char SubUpperOrLower( char ascii,int character );
 // Adds upper or lowercase letter to turn ascii from 1-26 to actual ascii.
 char AddUpperOrLower( char ascii,int character );
+int MoveCharByShift( int asciiCode,int shift );
 
 int main()
 {
@@ -184,26 +185,23 @@ string Encrypt( const string& msg,int shiftVal )
 // shift: How much to shift character by.
 char ShiftSingleChar( char unencrypted,int shift )
 {
-	int ascii = int( unencrypted );
+	int ascii = int( unencrypted ); // Ascii code to modify.
+
+	// Only shift if in the alphabet.
 	if( isalpha( unencrypted ) )
 	{
 		ascii = SubUpperOrLower( ascii,unencrypted );
+
+		ascii = MoveCharByShift( ascii,shift );
+
+		ascii = AddUpperOrLower( ascii,unencrypted );
+	}
+	else
+	{
+		ascii = int( unencrypted );
 	}
 
-	while( shift > 0 )
-	{
-		--shift;
-		++ascii;
-		if( ascii > 25 ) ascii = 0;
-	}
-	while( shift < 0 )
-	{
-		++shift;
-		--ascii;
-		if( ascii < 0 ) ascii = 25;
-	}
-
-	return( char( AddUpperOrLower( ascii,unencrypted ) ) );
+	return( char( ascii ) );
 }
 
 void PrintEncryptedMessage( const string& msg,int shift )
@@ -251,4 +249,22 @@ char AddUpperOrLower( char ascii,int character )
 	}
 
 	return( ascii );
+}
+
+int MoveCharByShift( int asciiCode,int shift )
+{
+	while( shift > 0 )
+	{
+		--shift;
+		++asciiCode;
+		if( asciiCode > 25 ) asciiCode = 0;
+	}
+	while( shift < 0 )
+	{
+		++shift;
+		--asciiCode;
+		if( asciiCode < 0 ) asciiCode = 25;
+	}
+
+	return( asciiCode );
 }
