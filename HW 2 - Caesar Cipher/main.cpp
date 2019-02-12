@@ -148,7 +148,7 @@ string PromptForMessage( const string& msg )
 // Print message then ask user for value, and return that.
 int PromptForValue( const string& msg )
 {
-	int input; // User inputted value.
+	int input = 0; // User inputted value.
 
 	// Ask user for and get value.
 	cout << msg << endl;
@@ -157,7 +157,8 @@ int PromptForValue( const string& msg )
 
 	if( input < 1 || input > 25 )
 	{
-		PromptForValue( msg );
+		cout << "Invalid choice, ";
+		input = PromptForValue( msg );
 	}
 
 	return( input );
@@ -171,9 +172,9 @@ string Encrypt( const string& msg,int shiftVal )
 	string encrypted = ""; // The encrypted message.
 
 	// Encrypt each char of msg then add to encrypted.
-	for( char c : msg )
+	for( int i = 0; i < int( msg.length() ); ++i )
 	{
-		encrypted += ShiftSingleChar( c,shiftVal );
+		encrypted += ShiftSingleChar( msg[i],shiftVal );
 	}
 
 	return( encrypted );
@@ -217,7 +218,7 @@ void PrintDecryptedMessage( const string& msg,int shift )
 void PrintForceDecrypted( const string & msg )
 {
 	cout << "Decrypted as:" << endl;
-	for( int i = 0; i < 25; ++i )
+	for( int i = 25; i > 0; --i )
 	{
 		cout << Encrypt( msg,i ) << endl;
 	}
