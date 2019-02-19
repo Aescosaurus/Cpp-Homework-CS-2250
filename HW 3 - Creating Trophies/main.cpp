@@ -129,8 +129,11 @@ void deleteTrophy(vector<Trophy>& trophies)
 	{
 		// Swap bad trophy with the one at the end and
 		//  remove the bad one.
-		swap( trophies[removeIndex],trophies.back() );
-		trophies.pop_back();
+		// swap( trophies[removeIndex],trophies.back() );
+		// trophies.pop_back();
+
+		// Or not since the evaluator doesn't like that.
+		trophies.erase( trophies.begin() + removeIndex );
 	}
 }
 
@@ -158,8 +161,7 @@ void renameTrophy(vector<Trophy>& trophies)
 {
 	cout << "You have chosen to rename an existing trophy." << endl;
 	const string name = promptForString( PROMPT_FOR_NAME );
-	const string newName = promptForString(
-		"Please enter the new name of the trophy" );
+	const string newName = promptForString( "Please enter the new name of the trophy" );
 	// Find the trophy and if it exists, change its name
 	const int loc = searchForTrophy( trophies,name );
 
@@ -178,8 +180,7 @@ void relevelTrophy(vector<Trophy>& trophies)
 {
 	cout << "You have chosen to change the level of an existing trophy." << endl;
 	string name = promptForString( PROMPT_FOR_NAME );
-	const int newLevel = promptForInt(
-		"Please enter the new level of your trophy(1-10)",1,10 );
+	const int newLevel = promptForInt( PROMPT_FOR_LEVEL,1,10 );
 
 	// Find the trophy and if it exists, change its level
 	const int index = searchForTrophy( trophies,name );
@@ -219,9 +220,9 @@ void printTrophies(vector<Trophy>& trophies)
 	cout << "You have chosen to print all of the trophies." << endl;
 
 	// Print all the trophies in the order they are stored in the vector
-	for( const Trophy& t : trophies )
+	for( int i = 0; i < int( trophies.size() ); ++i )
 	{
-		t.print();
+		trophies[i].print();
 	}
 }
 
@@ -329,7 +330,6 @@ Color promptForColor( const string& message )
 			cout << "That is not an acceptable color.  Try again." << endl;
 		}
 	}
-	cin.ignore();
 
 	return( col );
 }
@@ -339,9 +339,10 @@ int searchForTrophy( vector<Trophy> trophies,const string& name )
 {
 	// Find the trophy in the collection by its name
 	int trophyIndex = -1;
-	for( int i = 0; i < trophies.size(); ++i )
+	for( int i = 0; i < int( trophies.size() ); ++i )
 	{
-		if( trophies[i].getName() == name )
+		if( trophies[i].getName() == name &&
+			trophyIndex == -1 )
 		{
 			trophyIndex = i;
 		}
