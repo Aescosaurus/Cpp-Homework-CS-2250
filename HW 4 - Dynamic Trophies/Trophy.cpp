@@ -70,7 +70,7 @@ Color Trophy::getColor() const
 
 void Trophy::print() const
 {
-	cout << "[ " << name << " : " << level << " : "
+	cout << "[ " << *name << " : " << *level << " : "
 		<< col2str( *col ) << " ]" << endl;
 }
 

@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include "Trophy.h"
+#include <stdexcept>
+
 using namespace std;
 
 // Reusable strings
@@ -20,6 +22,7 @@ void printTrophies( const vector<Trophy*>& trophies );
 
 // Input handlers
 int printMenu();
+void printMenuOptions();
 Trophy* promptForTrophy();
 string promptForString( const string& message );
 int promptForInt( const string& message,int minimum,int maximum );
@@ -94,6 +97,24 @@ int main()
 int printMenu()
 {
 	int input;
+	string inputStr = "";
+	printMenuOptions();
+
+	getline( cin,inputStr );
+	safeStr2Int( input,inputStr );
+
+	while( !safeStr2Int( input,inputStr ) )
+	{
+		cout << "That is not a recognized menu selection, choose again." << endl;
+		printMenuOptions();
+		getline( cin,inputStr );
+	}
+
+	return input;
+}
+
+void printMenuOptions()
+{
 	cout << "-----------------------------------------" << endl
 		<< "Please select an option :" << endl
 		<< "1 - Add a new Trophy" << endl
@@ -105,8 +126,6 @@ int printMenu()
 		<< "7 - Print All the Trophies" << endl
 		<< "8 - Exit the program" << endl
 		<< "-----------------------------------------" << endl;
-	input = promptForInt( "",1,8 );
-	return input;
 }
 
 // Add a new Trophy to the collection
@@ -275,10 +294,11 @@ int promptForInt( const string& message,int minimum,int maximum )
 	cout << message << endl;
 
 	getline( cin,userInput );
+	safeStr2Int( value,userInput );
 
 	// Keep trying until the user gives a valid response.
-	while( value < minimum || value > maximum ||
-		!safeStr2Int( value,userInput ) )
+	while( !safeStr2Int( value,userInput ) ||
+		value < minimum || value > maximum )
 	{
 		cout << "That value is outside the acceptable range.  Try again." << endl;
 		getline( cin,userInput );
@@ -376,7 +396,7 @@ bool safeStr2Int( int& intToFill,const string& input )
 		intToFill = stoi( input );
 		success = true;
 	}
-	catch( std::invalid_argument ex )
+	catch( const invalid_argument& ex )
 	{
 		// input wasn't a number...
 		intToFill = -1;
