@@ -3,52 +3,75 @@
 
 Trophy::Trophy()
 	:
-	name( "" ),
-	level( 0 ),
-	col( BRONZE )
+	name( new string( "" ) ),
+	level( new int( 0 ) ),
+	col( new Color( BRONZE ) )
 {}
 
 Trophy::Trophy( const string& name,int level,Color c )
 	:
-	name( name ),
-	level( level ),
-	col( c )
+	name( new string( name ) ),
+	level( new int( level ) ),
+	col( new Color( c ) )
 {}
+
+Trophy::Trophy( const Trophy& rhs )
+	:
+	name( new string( *rhs.name ) ),
+	level( new int( *rhs.level ) ),
+	col( new Color( *rhs.col ) )
+{}
+
+Trophy& Trophy::operator=( const Trophy& rhs )
+{
+	*name = *rhs.name;
+	*level = *rhs.level;
+	*col = *rhs.col;
+
+	return *this;
+}
+
+Trophy::~Trophy()
+{
+	delete name;
+	delete level;
+	delete col;
+}
 
 void Trophy::setName( const string& newName )
 {
-	name = newName;
+	*name = newName;
 }
 
 void Trophy::setLevel( int newLevel )
 {
-	level = newLevel;
+	*level = newLevel;
 }
 
 void Trophy::setColor( Color newColor )
 {
-	col = newColor;
+	*col = newColor;
 }
 
 const string& Trophy::getName() const
 {
-	return name;
+	return *name;
 }
 
 int Trophy::getLevel() const
 {
-	return level;
+	return *level;
 }
 
 Color Trophy::getColor() const
 {
-	return col;
+	return *col;
 }
 
 void Trophy::print() const
 {
 	cout << "[ " << name << " : " << level << " : "
-		<< col2str( col ) << " ]" << endl;
+		<< col2str( *col ) << " ]" << endl;
 }
 
 string Trophy::col2str( Color c )

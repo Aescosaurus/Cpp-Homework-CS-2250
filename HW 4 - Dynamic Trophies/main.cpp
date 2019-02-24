@@ -10,24 +10,25 @@ const string PROMPT_FOR_LEVEL = "Please enter the level of your Trophy (between 
 const string PROMPT_FOR_COLOR = "Please enter the color of your Trophy (GOLD, SILVER, or BRONZE)";
 
 // Menu choice handlers
-void addTrophy( vector<Trophy>& trophies );
-void copyTrophy( vector<Trophy>& trophies );
-void deleteTrophy( vector<Trophy>& trophies );
-void renameTrophy( vector<Trophy>& trophies );
-void relevelTrophy( vector<Trophy>& trophies );
-void recolorTrophy( vector<Trophy>& trophies );
-void printTrophies( vector<Trophy>& trophies );
+void addTrophy( vector<Trophy*>& trophies );
+void copyTrophy( vector<Trophy*>& trophies );
+void deleteTrophy( vector<Trophy*>& trophies );
+void renameTrophy( const vector<Trophy*>& trophies );
+void relevelTrophy( const vector<Trophy*>& trophies );
+void recolorTrophy( const vector<Trophy*>& trophies );
+void printTrophies( const vector<Trophy*>& trophies );
 
 // Input handlers
 int printMenu();
-Trophy promptForTrophy();
+Trophy* promptForTrophy();
 string promptForString( const string& message );
 int promptForInt( const string& message,int minimum,int maximum );
 Color promptForColor( const string& message );
 
 // Useful helper methods
 string stringToUpper( string value );
-int searchForTrophy( vector<Trophy> trophies,const string& name );
+int searchForTrophy( const vector<Trophy*>& trophies,const string& name );
+bool safeStr2Int( int& intToFill,const string& input );
 
 // This application allows for the management of a trophy collection
 int main()
@@ -39,7 +40,7 @@ int main()
 		<< "using this simple menu!" << endl
 		<< "***********************************************" << endl;
 
-	vector<Trophy> trophies;
+	vector<Trophy*> trophies;
 
 	// Loop the menu, allowing the user to select an action each time
 	int input;
@@ -79,6 +80,13 @@ int main()
 
 	} while( input != 8 );
 
+	// Free trophy memory.
+	for( Trophy* trophy : trophies )
+	{
+		delete trophy;
+	}
+	trophies.clear();
+
 	return 0;
 }
 
@@ -97,13 +105,12 @@ int printMenu()
 		<< "7 - Print All the Trophies" << endl
 		<< "8 - Exit the program" << endl
 		<< "-----------------------------------------" << endl;
-	cin >> input;
-	cin.ignore();
+	input = promptForInt( "",1,8 );
 	return input;
 }
 
 // Add a new Trophy to the collection
-void addTrophy( vector<Trophy>& trophies )
+void addTrophy( vector<Trophy*>& trophies )
 {
 	cout << "You have chosen to add a trophy." << endl;
 
@@ -112,7 +119,7 @@ void addTrophy( vector<Trophy>& trophies )
 }
 
 // Delete an existing Trophy from the collection
-void deleteTrophy( vector<Trophy>& trophies )
+void deleteTrophy( vector<Trophy*>& trophies )
 {
 	cout << "You have chosen to delete an existing trophy." << endl;
 	string name = promptForString( PROMPT_FOR_NAME );
@@ -133,12 +140,13 @@ void deleteTrophy( vector<Trophy>& trophies )
 		// trophies.pop_back();
 
 		// Or not since the evaluator doesn't like that.
+		delete trophies[removeIndex];
 		trophies.erase( trophies.begin() + removeIndex );
 	}
 }
 
 // Copy an existing Trophy in the collection
-void copyTrophy( vector<Trophy>& trophies )
+void copyTrophy( vector<Trophy*>& trophies )
 {
 	cout << "You have chosen to copy an existing trophy." << endl;
 	string name = promptForString( PROMPT_FOR_NAME );
@@ -152,12 +160,12 @@ void copyTrophy( vector<Trophy>& trophies )
 	}
 	else
 	{
-		trophies.push_back( Trophy( trophies[spot] ) );
+		trophies.push_back( new Trophy( *trophies[spot] ) );
 	}
 }
 
 // Rename an existing Trophy (change the name)
-void renameTrophy( vector<Trophy>& trophies )
+void renameTrophy( const vector<Trophy*>& trophies )
 {
 	cout << "You have chosen to rename an existing trophy." << endl;
 	const string name = promptForString( PROMPT_FOR_NAME );
@@ -171,12 +179,12 @@ void renameTrophy( vector<Trophy>& trophies )
 	}
 	else
 	{
-		trophies[loc].setName( newName );
+		trophies[loc]->setName( newName );
 	}
 }
 
 // Relevel an existing Trophy (change the level)
-void relevelTrophy( vector<Trophy>& trophies )
+void relevelTrophy( const vector<Trophy*>& trophies )
 {
 	cout << "You have chosen to change the level of an existing trophy." << endl;
 	string name = promptForString( PROMPT_FOR_NAME );
@@ -191,12 +199,12 @@ void relevelTrophy( vector<Trophy>& trophies )
 	}
 	else
 	{
-		trophies[index].setLevel( newLevel );
+		trophies[index]->setLevel( newLevel );
 	}
 }
 
 // Recolor an existing Trophy (change the color)
-void recolorTrophy( vector<Trophy>& trophies )
+void recolorTrophy( const vector<Trophy*>& trophies )
 {
 	cout << "You have chosen to change the color of an existing trophy." << endl;
 	const string name = promptForString( PROMPT_FOR_NAME );
@@ -210,31 +218,31 @@ void recolorTrophy( vector<Trophy>& trophies )
 	}
 	else
 	{
-		trophies[ind].setColor( newCol );
+		trophies[ind]->setColor( newCol );
 	}
 }
 
 // Print all of the Trophies in the collection
-void printTrophies( vector<Trophy>& trophies )
+void printTrophies( const vector<Trophy*>& trophies )
 {
 	cout << "You have chosen to print all of the trophies." << endl;
 
 	// Print all the trophies in the order they are stored in the vector
 	for( int i = 0; i < int( trophies.size() ); ++i )
 	{
-		trophies[i].print();
+		trophies[i]->print();
 	}
 }
 
 // Ask the user for a Trophy, validate their responses
 // Return the Trophy
-Trophy promptForTrophy()
+Trophy* promptForTrophy()
 {
 	string name = promptForString( PROMPT_FOR_NAME );
 	int level = promptForInt( PROMPT_FOR_LEVEL,1,10 );
 	Color col = promptForColor( PROMPT_FOR_COLOR );
 
-	Trophy t( name,level,col );
+	Trophy* t = new Trophy( name,level,col );
 
 	return( t );
 }
@@ -263,17 +271,17 @@ string promptForString( const string& message )
 int promptForInt( const string& message,int minimum,int maximum )
 {
 	int value = 0;
+	string userInput = "";
 	cout << message << endl;
 
-	cin >> value;
-	cin.ignore();
+	getline( cin,userInput );
 
 	// Keep trying until the user gives a valid response.
-	while( value < minimum || value > maximum )
+	while( value < minimum || value > maximum ||
+		!safeStr2Int( value,userInput ) )
 	{
 		cout << "That value is outside the acceptable range.  Try again." << endl;
-		cin >> value;
-		cin.ignore();
+		getline( cin,userInput );
 	}
 
 	return value;
@@ -335,13 +343,13 @@ Color promptForColor( const string& message )
 }
 
 // Search for a trophy in the collection by name
-int searchForTrophy( vector<Trophy> trophies,const string& name )
+int searchForTrophy( const vector<Trophy*>& trophies,const string& name )
 {
 	// Find the trophy in the collection by its name
 	int trophyIndex = -1;
 	for( int i = 0; i < int( trophies.size() ); ++i )
 	{
-		if( trophies[i].getName() == name &&
+		if( trophies[i]->getName() == name &&
 			trophyIndex == -1 )
 		{
 			trophyIndex = i;
@@ -356,4 +364,24 @@ int searchForTrophy( vector<Trophy> trophies,const string& name )
 
 	// If you find the trophy, return its position in the collection
 	return trophyIndex;
+}
+
+// Convert a string to an int and return true if it
+//  was successful.
+bool safeStr2Int( int& intToFill,const string& input )
+{
+	bool success = false; // Whether conversion worked.
+	try
+	{
+		intToFill = stoi( input );
+		success = true;
+	}
+	catch( std::invalid_argument ex )
+	{
+		// input wasn't a number...
+		intToFill = -1;
+		success = false;
+	}
+
+	return success;
 }

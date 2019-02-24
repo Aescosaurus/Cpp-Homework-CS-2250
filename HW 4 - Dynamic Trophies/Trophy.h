@@ -17,6 +17,9 @@ class Trophy
 public:
 	Trophy();
 	Trophy( const string& name,int level,Color c );
+	Trophy( const Trophy& rhs );
+	Trophy& operator=( const Trophy& rhs );
+	~Trophy();
 
 	void setName( const string& newName );
 	void setLevel( int newLevel );
@@ -28,9 +31,9 @@ public:
 	void print() const;
 	static string col2str( Color c );
 private:
-	string name;
-	int level;
-	Color col;
+	string* name;
+	int* level;
+	Color* col;
 };
 
 #endif
