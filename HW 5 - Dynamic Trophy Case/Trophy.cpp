@@ -95,7 +95,23 @@ bool Trophy::operator!=(const Trophy& rhs) const
 
 bool Trophy::operator<(const Trophy& rhs) const
 {
-	return *name > *rhs.name;
+	bool result = false;
+
+	if(*level != *rhs.level)
+	{
+		result = *level < *rhs.level;
+	}
+	else if(*col != *rhs.col)
+	{
+		// Since colors are in descending order.
+		result = int(*col) > int(*rhs.col);
+	}
+	else
+	{
+		result = *name < *rhs.name;
+	}
+
+	return result;
 }
 
 bool Trophy::operator<=(const Trophy& rhs) const
