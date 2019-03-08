@@ -135,9 +135,10 @@ ostream& operator<<(ostream& stream, const Trophy& rhs)
 	// stream << *rhs.name << ", " << *rhs.level << ", "
 	// 	<< Trophy::col2str(*rhs.col);
 
-	stream << "[ " << setw(30) << *rhs.name << ' '
-		<< setw(2) << *rhs.level << ' '
-		<< setw(6) << Trophy::col2str(*rhs.col) << " ]";
+	stream << "[ " << setw(30) << left << *rhs.name
+		<< " : " << setw(2) << right << *rhs.level << " : "
+		<< setw(6) << left << Trophy::col2str(*rhs.col)
+		<< " ]";
 
 	return stream;
 }
