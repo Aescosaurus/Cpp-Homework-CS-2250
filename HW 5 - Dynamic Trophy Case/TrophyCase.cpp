@@ -74,7 +74,7 @@ void TrophyCase::addTrophy(const string& name, int level,
 		m_trophies = trophies;
 	}
 
-	// TODO: Sort here maybe?
+	insertionSort();
 }
 
 bool TrophyCase::copyTrophy(const string& copyee)
@@ -114,7 +114,7 @@ bool TrophyCase::deleteTrophy(const string& toDelete)
 
 		success = true;
 
-		// TODO: Sort maybe?
+		insertionSort();
 	}
 	else
 	{
