@@ -1,5 +1,6 @@
 #include "Trophy.h"
 #include <iostream>
+#include <iomanip>
 
 Trophy::Trophy()
 	:
@@ -131,8 +132,12 @@ bool Trophy::operator>=(const Trophy& rhs) const
 
 ostream& operator<<(ostream& stream, const Trophy& rhs)
 {
-	stream << *rhs.name << ", " << *rhs.level << ", "
-		<< Trophy::col2str(*rhs.col);
+	// stream << *rhs.name << ", " << *rhs.level << ", "
+	// 	<< Trophy::col2str(*rhs.col);
+
+	stream << "[ " << setw(30) << *rhs.name << ' '
+		<< setw(2) << *rhs.level << ' '
+		<< setw(6) << Trophy::col2str(*rhs.col) << " ]";
 
 	return stream;
 }
