@@ -3,55 +3,75 @@
 
 TrophyCase::TrophyCase()
 	:
-	list(new Trophy*[startSize])
+	m_trophies(new Trophy*[startSize])
 {}
 
 TrophyCase::TrophyCase(const TrophyCase& rhs)
 	:
-	list(new Trophy*[rhs.capacity]),
-	capacity(rhs.capacity),
-	curPos(rhs.curPos)
+	m_trophies(new Trophy*[rhs.m_capacity]),
+	m_capacity(rhs.m_capacity),
+	m_nbrOfTrophies(rhs.m_nbrOfTrophies)
 {
-	for(int i = 0; i < curPos; ++i)
+	for(int i = 0; i < m_nbrOfTrophies; ++i)
 	{
-		list[i] = new Trophy(*rhs.list[i]);
+		m_trophies[i] = new Trophy(*rhs.m_trophies[i]);
 	}
+}
+
+TrophyCase& TrophyCase::operator=(const TrophyCase& rhs)
+{
+	// Free my memory.
+	for(int i = 0; i < m_nbrOfTrophies; ++i)
+	{
+		delete m_trophies[i];
+	}
+
+	delete m_trophies;
+
+	// Create a new list and copy entries over.
+	m_trophies = new Trophy*[rhs.m_capacity];
+	for(int i = 0; i < m_nbrOfTrophies; ++i)
+	{
+		m_trophies[i] = new Trophy(*rhs.m_trophies[i]);
+	}
+
+	return *this;
 }
 
 TrophyCase::~TrophyCase()
 {
-	for(int i = 0; i < curPos; ++i)
+	for(int i = 0; i < m_nbrOfTrophies; ++i)
 	{
-		delete list[i];
+		delete m_trophies[i];
 	}
 
-	delete list;
+	delete m_trophies;
 }
 
 void TrophyCase::addTrophy(const string& name, int level,
 	Color c)
 {
-	list[curPos++] = new Trophy(name, level, c);
+	m_trophies[m_nbrOfTrophies++] = new Trophy(name, level, c);
 
 	// We must reallocate!
-	if(curPos >= capacity/*-1*/)
+	if(m_nbrOfTrophies >= m_capacity/*-1*/)
 	{
 		Trophy** trophies = nullptr;
 
 		// Add 10% extra capacity.
-		capacity = int(float(capacity) * 1.1f);
-		trophies = new Trophy*[capacity];
+		m_capacity = int(float(m_capacity) * 1.1f);
+		trophies = new Trophy*[m_capacity];
 
 		// Move each list item then get rid of it.
-		for(int i = 0; i < curPos; ++i)
+		for(int i = 0; i < m_nbrOfTrophies; ++i)
 		{
-			trophies[i] = list[i];
-			delete list[i];
+			trophies[i] = m_trophies[i];
+			delete m_trophies[i];
 		}
-		delete list;
+		delete m_trophies;
 
 		// Assign list to trophies.
-		list = trophies;
+		m_trophies = trophies;
 	}
 
 	// TODO: Sort here maybe?
@@ -86,11 +106,11 @@ bool TrophyCase::deleteTrophy(const string& toDelete)
 	if(found != nullptr)
 	{
 		// Swap found trophy with the last one.
-		std::swap(*found, *list[curPos]);
+		std::swap(*found, *m_trophies[m_nbrOfTrophies]);
 
 		// Pop the found trophy from the list.
-		delete list[curPos];
-		--curPos;
+		delete m_trophies[m_nbrOfTrophies];
+		--m_nbrOfTrophies;
 
 		success = true;
 
@@ -166,21 +186,21 @@ bool TrophyCase::recolorTrophy(const string& name,
 
 int TrophyCase::getNbrOfTrophies() const
 {
-	return curPos;
+	return m_nbrOfTrophies;
 }
 
 int TrophyCase::getAllocatedSize() const
 {
-	return capacity;
+	return m_capacity;
 }
 
 Trophy* TrophyCase::findTrophy(const string& name)
 {
 	Trophy* result = nullptr;
 
-	for(int i = 0; i < curPos; ++i)
+	for(int i = 0; i < m_nbrOfTrophies; ++i)
 	{
-		Trophy* curTrophy = list[i];
+		Trophy* curTrophy = m_trophies[i];
 
 		if(curTrophy->getName() == name)
 		{
@@ -189,4 +209,35 @@ Trophy* TrophyCase::findTrophy(const string& name)
 	}
 
 	return result;
+}
+
+void TrophyCase::insertionSort()
+{
+	Trophy* value;
+	int j;
+
+	for(int i = 1; i < m_nbrOfTrophies; ++i)
+	{
+		value = m_trophies[i];
+		j = i - 1;
+
+		while(j >= 0 && *m_trophies[j] > *value)
+		{
+			m_trophies[j + 1] = m_trophies[j];
+			--j;
+		}
+
+		m_trophies[j + 1] = value;
+	}
+}
+
+ostream& operator<<(ostream& lhs,
+	const TrophyCase& rhs)
+{
+	for(int i = 0; i < rhs.m_nbrOfTrophies; ++i)
+	{
+		lhs << *rhs.m_trophies[i] << endl;
+	}
+
+	return lhs;
 }

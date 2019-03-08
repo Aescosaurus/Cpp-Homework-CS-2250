@@ -32,11 +32,10 @@ public:
 	static string col2str(Color c);
 	bool operator==(const Trophy& rhs) const;
 	bool operator!=(const Trophy& rhs) const;
-	// Do I need these?
-	// bool operator<( const Trophy& rhs ) const;
-	// bool operator<=( const Trophy& rhs ) const;
-	// bool operator>( const Trophy& rhs ) const;
-	// bool operator>=( const Trophy& rhs ) const;
+	bool operator<( const Trophy& rhs ) const;
+	bool operator<=( const Trophy& rhs ) const;
+	bool operator>( const Trophy& rhs ) const;
+	bool operator>=( const Trophy& rhs ) const;
 	friend ostream& operator<<(ostream& stream,
 		const Trophy& rhs);
 private:

@@ -8,6 +8,7 @@ class TrophyCase
 public:
 	TrophyCase();
 	TrophyCase(const TrophyCase& rhs);
+	TrophyCase& operator=(const TrophyCase& rhs);
 	~TrophyCase();
 
 	void addTrophy(const string& name, int level,
@@ -23,13 +24,19 @@ public:
 
 	int getNbrOfTrophies() const;
 	int getAllocatedSize() const;
+	friend ostream& operator<<(ostream& lhs,
+		const TrophyCase& rhs);
 private:
 	Trophy* findTrophy(const string& name);
+	// This type of sort is scary under the hood but
+	//  supposedly works well if we're mostly sorted and
+	//  only add a new item on the end.
+	void insertionSort();
 private:
 	static constexpr int startSize = 10;
-	Trophy** list = nullptr;
-	int capacity = startSize;
-	int curPos = 0;
+	Trophy** m_trophies = nullptr;
+	int m_capacity = startSize;
+	int m_nbrOfTrophies = 0;
 };
 
 #endif

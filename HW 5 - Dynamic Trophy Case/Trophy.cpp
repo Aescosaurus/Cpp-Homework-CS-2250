@@ -93,6 +93,26 @@ bool Trophy::operator!=(const Trophy& rhs) const
 	return !(*this == rhs);
 }
 
+bool Trophy::operator<(const Trophy& rhs) const
+{
+	return *name > *rhs.name;
+}
+
+bool Trophy::operator<=(const Trophy& rhs) const
+{
+	return *this == rhs || *this < rhs;
+}
+
+bool Trophy::operator>(const Trophy& rhs) const
+{
+	return !(*this < rhs) && *this != rhs;
+}
+
+bool Trophy::operator>=(const Trophy& rhs) const
+{
+	return *this > rhs || *this == rhs;
+}
+
 ostream& operator<<(ostream& stream, const Trophy& rhs)
 {
 	stream << *rhs.name << ", " << *rhs.level << ", "
