@@ -28,6 +28,9 @@ TrophyCase& TrophyCase::operator=(const TrophyCase& rhs)
 
 	delete m_trophies;
 
+	m_nbrOfTrophies = rhs.m_nbrOfTrophies;
+	m_capacity = rhs.m_capacity;
+
 	// Create a new list and copy entries over.
 	m_trophies = new Trophy*[rhs.m_capacity];
 	for(int i = 0; i < m_nbrOfTrophies; ++i)
@@ -51,8 +54,6 @@ TrophyCase::~TrophyCase()
 void TrophyCase::addTrophy(const string& name, int level,
 	Color c)
 {
-	m_trophies[m_nbrOfTrophies++] = new Trophy(name, level, c);
-
 	// We must reallocate!
 	if(m_nbrOfTrophies >= m_capacity)
 	{
@@ -73,6 +74,8 @@ void TrophyCase::addTrophy(const string& name, int level,
 		// Assign list to trophies.
 		m_trophies = trophies;
 	}
+
+	m_trophies[m_nbrOfTrophies++] = new Trophy(name, level, c);
 
 	insertionSort();
 }
