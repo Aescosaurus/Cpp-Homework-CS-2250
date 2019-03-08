@@ -54,7 +54,7 @@ void TrophyCase::addTrophy(const string& name, int level,
 	m_trophies[m_nbrOfTrophies++] = new Trophy(name, level, c);
 
 	// We must reallocate!
-	if(m_nbrOfTrophies >= m_capacity/*-1*/)
+	if(m_nbrOfTrophies >= m_capacity)
 	{
 		Trophy** trophies = nullptr;
 
@@ -65,7 +65,7 @@ void TrophyCase::addTrophy(const string& name, int level,
 		// Move each list item then get rid of it.
 		for(int i = 0; i < m_nbrOfTrophies; ++i)
 		{
-			trophies[i] = m_trophies[i];
+			trophies[i] = new Trophy( *m_trophies[i] );
 			delete m_trophies[i];
 		}
 		delete m_trophies;
@@ -106,10 +106,10 @@ bool TrophyCase::deleteTrophy(const string& toDelete)
 	if(found != nullptr)
 	{
 		// Swap found trophy with the last one.
-		std::swap(*found, *m_trophies[m_nbrOfTrophies]);
+		std::swap(*found, *m_trophies[m_nbrOfTrophies - 1]);
 
 		// Pop the found trophy from the list.
-		delete m_trophies[m_nbrOfTrophies];
+		delete m_trophies[m_nbrOfTrophies - 1];
 		--m_nbrOfTrophies;
 
 		success = true;
