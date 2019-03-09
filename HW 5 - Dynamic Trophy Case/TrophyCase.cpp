@@ -20,22 +20,25 @@ TrophyCase::TrophyCase(const TrophyCase& rhs)
 
 TrophyCase& TrophyCase::operator=(const TrophyCase& rhs)
 {
-	// Free my memory.
-	for(int i = 0; i < m_nbrOfTrophies; ++i)
+	if(this != &rhs) // Deal with that pesky test.
 	{
-		delete m_trophies[i];
-	}
+		// Free my memory.
+		for(int i = 0; i < m_nbrOfTrophies; ++i)
+		{
+			delete m_trophies[i];
+		}
 
-	delete m_trophies;
+		delete m_trophies;
 
-	m_nbrOfTrophies = rhs.m_nbrOfTrophies;
-	m_capacity = rhs.m_capacity;
+		m_nbrOfTrophies = rhs.m_nbrOfTrophies;
+		m_capacity = rhs.m_capacity;
 
-	// Create a new list and copy entries over.
-	m_trophies = new Trophy*[rhs.m_capacity];
-	for(int i = 0; i < m_nbrOfTrophies; ++i)
-	{
-		m_trophies[i] = new Trophy(*rhs.m_trophies[i]);
+		// Create a new list and copy entries over.
+		m_trophies = new Trophy*[m_capacity];
+		for(int i = 0; i < m_nbrOfTrophies; ++i)
+		{
+			m_trophies[i] = new Trophy(*rhs.m_trophies[i]);
+		}
 	}
 
 	return *this;
@@ -92,6 +95,8 @@ bool TrophyCase::copyTrophy(const string& copyee)
 			foundTrophy->getColor());
 
 		success = true;
+
+		insertionSort();
 	}
 	else
 	{
@@ -138,6 +143,8 @@ bool TrophyCase::renameTrophy(const string& name,
 		found->setName(fixedName);
 
 		success = true;
+
+		insertionSort();
 	}
 	else
 	{
@@ -158,6 +165,8 @@ bool TrophyCase::relevelTrophy(const string& name,
 		found->setLevel(fixedLevel);
 
 		success = true;
+
+		insertionSort();
 	}
 	else
 	{
@@ -178,6 +187,8 @@ bool TrophyCase::recolorTrophy(const string& name,
 		match->setColor(fixedCol);
 
 		success = true;
+
+		insertionSort();
 	}
 	else
 	{
