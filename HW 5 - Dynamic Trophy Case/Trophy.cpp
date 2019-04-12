@@ -104,8 +104,7 @@ bool Trophy::operator<(const Trophy& rhs) const
 	}
 	else if(*col != *rhs.col)
 	{
-		// Since colors are in descending order.
-		result = int(*col) > int(*rhs.col);
+		result = int(*col) < int(*rhs.col);
 	}
 	else
 	{

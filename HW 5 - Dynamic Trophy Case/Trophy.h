@@ -7,9 +7,9 @@ using namespace std;
 
 enum Color
 {
-	GOLD,
+	BRONZE,
 	SILVER,
-	BRONZE
+	GOLD
 };
 
 class Trophy

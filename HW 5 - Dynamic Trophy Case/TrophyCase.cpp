@@ -1,5 +1,5 @@
 #include "TrophyCase.h"
-#include <algorithm>
+#include <iostream>
 
 TrophyCase::TrophyCase()
 	:
@@ -66,11 +66,10 @@ void TrophyCase::addTrophy(const string& name, int level,
 		m_capacity = int(float(m_capacity) * 1.1f);
 		trophies = new Trophy*[m_capacity];
 
-		// Move each list item then get rid of it.
+		// Set each pointer to the previous one.
 		for(int i = 0; i < m_nbrOfTrophies; ++i)
 		{
-			trophies[i] = new Trophy( *m_trophies[i] );
-			delete m_trophies[i];
+			trophies[i] = m_trophies[i];
 		}
 		delete m_trophies;
 
@@ -250,7 +249,7 @@ ostream& operator<<(ostream& lhs,
 {
 	for(int i = 0; i < rhs.m_nbrOfTrophies; ++i)
 	{
-		lhs << *rhs.m_trophies[i] << endl;
+		lhs << *rhs.m_trophies[i] << std::endl;
 	}
 
 	return lhs;
