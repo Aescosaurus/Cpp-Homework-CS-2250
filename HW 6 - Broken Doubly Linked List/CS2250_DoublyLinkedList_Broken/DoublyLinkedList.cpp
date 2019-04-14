@@ -1,4 +1,5 @@
 #include "DoublyLinkedList.h"
+#include <cassert>
 
 // Default Constructor
 // Initializes first and last pointers to NULL (empty list)
@@ -120,9 +121,23 @@ void DoublyLinkedList::AddBack( int item )
 int DoublyLinkedList::RemoveFront()
 {
 	// If there are no items in the list
-	if( m_head == m_tail )
+	if( m_head == nullptr )
 	{
 		throw string( "ERROR:  Cannot remove from an empty list" );
+		return( 0 );
+	}
+	else if( m_head == m_tail )
+	{
+		assert( m_count == 1 );
+
+		int data = m_head->GetData();
+
+		m_head = nullptr;
+		m_tail = nullptr;
+
+		--m_count;
+
+		return( data );
 	}
 	// If there at least one item
 	else
@@ -153,11 +168,23 @@ int DoublyLinkedList::RemoveFront()
 int DoublyLinkedList::RemoveBack()
 {
 	// If there are no items in the list
-	if( m_head == m_tail )
+	if( m_head == nullptr )
 	{
 		throw string( "ERROR:  Cannot remove from an empty list" );
+		return( 0 );
 	}
-	// If there at least one item
+	else if( m_head == m_tail )
+	{
+		int data = m_head->GetData();
+		
+		m_head = nullptr;
+		m_tail = nullptr;
+
+		--m_count;
+		assert( m_count == 0 );
+
+		return( data );
+	}
 	else
 	{
 		// Store data to be removed
@@ -188,33 +215,37 @@ bool DoublyLinkedList::RemoveItem( int item )
 	DoublyLinkedListNode* curr = SearchNodes( item );
 
 	// If item was not found or list is empty
-	if( curr == NULL )
+	if( curr == nullptr )
 	{
 		return false;
 	}
-	else if( curr->GetNext() == nullptr &&
-		curr->GetPrev() != nullptr )
+	else if( curr == m_head )
 	{
-		curr->GetPrev()->SetNext( nullptr );
-		m_tail = curr->GetPrev();
+		RemoveFront();
+		return( true );
 	}
-	else if( curr->GetPrev() == nullptr &&
-		curr->GetNext() != nullptr )
+	else if( curr == m_tail )
 	{
-		curr->GetNext()->SetPrev( nullptr );
-		m_head = curr->GetNext();
+		RemoveBack();
+		return( true );
+	}
+	else if( curr->GetNext() == nullptr ||
+		curr->GetPrev() == nullptr )
+	{
+		return( false );
 	}
 	else
 	{
 		// Re-link the list.
 		curr->GetNext()->SetPrev( curr->GetPrev() );
 		curr->GetPrev()->SetNext( curr->GetNext() );
+
+		// Remove item
+		delete curr;
+		--m_count;
+
+		return true;
 	}
-
-	// Remove item
-	delete curr;
-
-	return true;
 }
 
 // Search - searches for the parameter
@@ -222,7 +253,7 @@ bool DoublyLinkedList::RemoveItem( int item )
 bool DoublyLinkedList::Search( int item ) const
 {
 	DoublyLinkedListNode* curr = SearchNodes( item );
-	return( curr == nullptr );
+	return( curr != nullptr );
 }
 
 // SearchNodes - searches for the parameter and returns its node
@@ -236,18 +267,18 @@ DoublyLinkedListNode* DoublyLinkedList::SearchNodes( int item ) const
 	{
 		// If this node's data matches the parameter
 		// return it
-		if( curr->GetData() != item ) return curr;
+		if( curr->GetData() == item ) return curr;
 		else curr = curr->GetNext();
 	}
 
 	// Item was not found, return NULL
-	return curr;
+	return nullptr;
 }
 
 // Size - returns the number of items in the list
 int DoublyLinkedList::Size() const
 {
-	return m_count - 1;
+	return m_count;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -358,6 +389,7 @@ DoublyLinkedList& DoublyLinkedList::operator=( const DoublyLinkedList& rhsList )
 		{
 			RemoveFront();
 		}
+
 		// Iterator for parameter list, start at first node
 		DoublyLinkedListNode* curr = rhsList.m_head;
 
