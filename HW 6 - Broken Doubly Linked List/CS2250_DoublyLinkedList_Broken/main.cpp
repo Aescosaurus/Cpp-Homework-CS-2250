@@ -10,7 +10,7 @@ using namespace std;
 void RunIntegerTests()
 {
 	// TESTING List Constructor
-	DoublyLinkedList list;
+	DoublyLinkedList<int> list;
 	cout << list << endl;
 
 	// TESTING List AddFront, Size and operator<<
@@ -141,7 +141,7 @@ void RunIntegerTests()
 	// TESTING List Constructors, Destructors and operator=
 	cout << "\n**************  TESTING Constructors, Destructors and operator= ****************" << endl;
 
-	DoublyLinkedList* listPtr1 = new DoublyLinkedList();
+	DoublyLinkedList<int>* listPtr1 = new DoublyLinkedList<int>();
 
 	// prepare a list
 	for (int i = 1; i <= 5; ++i)
@@ -153,14 +153,14 @@ void RunIntegerTests()
 	listPtr1->PrintFullNodes();
 
 	// Test the copy constructor
-	DoublyLinkedList* listPtr2 = new DoublyLinkedList(*listPtr1);
+	DoublyLinkedList<int>* listPtr2 = new DoublyLinkedList<int>(*listPtr1);
 	cout << "Size Copy: " << listPtr2->Size() << endl;
 	cout << "List Copy: " << *listPtr2 << endl;
 	listPtr2->PrintFullNodes();
 	delete listPtr2;
 
 	// Test the assignment operator
-	listPtr2 = new DoublyLinkedList();
+	listPtr2 = new DoublyLinkedList<int>();
 	*listPtr2 = *listPtr1;
 	cout << "Size operator=: " << listPtr2->Size() << endl;
 	cout << "List operator=: " << *listPtr2 << endl;
@@ -181,7 +181,6 @@ void RunIntegerTests()
 // Run the tests on the list using strings
 void RunStringTests()
 {
-	/*
 	// TESTING List Constructor
 	DoublyLinkedList<string> list;
 	cout << list << endl;
@@ -314,7 +313,7 @@ void RunStringTests()
 	// TESTING List Constructors, Destructors and operator=
 	cout << "\n**************  TESTING Constructors, Destructors and operator= ****************" << endl;
 
-	DoublyLinkedList* listPtr1 = new DoublyLinkedList();
+	DoublyLinkedList<string>* listPtr1 = new DoublyLinkedList<string>();
 
 	// prepare a list
 	for (int i = 1; i <= 5; ++i)
@@ -326,14 +325,14 @@ void RunStringTests()
 	listPtr1->PrintFullNodes();
 
 	// Test the copy constructor
-	DoublyLinkedList* listPtr2 = new DoublyLinkedList(*listPtr1);
+	DoublyLinkedList<string>* listPtr2 = new DoublyLinkedList<string>(*listPtr1);
 	cout << "Size Copy: " << listPtr2->Size() << endl;
 	cout << "List Copy: " << *listPtr2 << endl;
 	listPtr2->PrintFullNodes();
 	delete listPtr2;
 
 	// Test the assignment operator
-	listPtr2 = new DoublyLinkedList();
+	listPtr2 = new DoublyLinkedList<string>();
 	*listPtr2 = *listPtr1;
 	cout << "Size operator=: " << listPtr2->Size() << endl;
 	cout << "List operator=: " << *listPtr2 << endl;
@@ -349,7 +348,6 @@ void RunStringTests()
 	// Delete the original list, if there is anything wrong with memory in copy or
 	// assignment operator, this delete will cause a crash!
 	delete listPtr1;
-	*/
 }
 
 int main()

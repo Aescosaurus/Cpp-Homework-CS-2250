@@ -1,9 +1,14 @@
+#ifndef DOUBLY_LINKED_LIST_NODE_CPP
+#define DOUBLY_LINKED_LIST_NODE_CPP
+
 #include "DoublyLinkedList.h"
 
 // Static member for TESTING ONLY
-int DoublyLinkedListNode::nbrOfNodes = 0;
+template<typename T>
+int DoublyLinkedListNode<T>::nbrOfNodes = 0;
 
-int DoublyLinkedListNode::GetNbrOfNodes()
+template<typename T>
+int DoublyLinkedListNode<T>::GetNbrOfNodes()
 {
 	return nbrOfNodes;
 }
@@ -12,9 +17,10 @@ int DoublyLinkedListNode::GetNbrOfNodes()
 // Default constructor
 // Initializes next and previous pointers to NULL
 // Initializes data to a "safe" value of 0
-DoublyLinkedListNode::DoublyLinkedListNode(void)
+template<typename T>
+DoublyLinkedListNode<T>::DoublyLinkedListNode(void)
 {
-	m_data = 0;
+	m_data = T( 0 );
 	m_next = NULL;
 	m_prev = NULL;
 
@@ -23,7 +29,8 @@ DoublyLinkedListNode::DoublyLinkedListNode(void)
 
 // Copy Constructor
 // Copies an existing node exactly by copying each data member
-DoublyLinkedListNode::DoublyLinkedListNode(const DoublyLinkedListNode& node)
+template<typename T>
+DoublyLinkedListNode<T>::DoublyLinkedListNode(const DoublyLinkedListNode& node)
 {
 	m_data = node.m_data;
 	m_next = node.m_next;
@@ -35,7 +42,8 @@ DoublyLinkedListNode::DoublyLinkedListNode(const DoublyLinkedListNode& node)
 // Constructor
 // Accepts the data to store in the node as the parameter
 // Initializes previous and next pointers to NULL
-DoublyLinkedListNode::DoublyLinkedListNode(int data)
+template<typename T>
+DoublyLinkedListNode<T>::DoublyLinkedListNode(const T& data)
 {
 	m_data = data;
 	m_next = NULL;
@@ -46,7 +54,8 @@ DoublyLinkedListNode::DoublyLinkedListNode(int data)
 
 // Constructor
 // Accepts data, prev, and next pointers as parameters
-DoublyLinkedListNode::DoublyLinkedListNode(int data, DoublyLinkedListNode* prev, DoublyLinkedListNode* next)
+template<typename T>
+DoublyLinkedListNode<T>::DoublyLinkedListNode(const T& data, DoublyLinkedListNode* prev, DoublyLinkedListNode* next)
 {
 	m_data = data;
 	m_next = next;
@@ -56,7 +65,8 @@ DoublyLinkedListNode::DoublyLinkedListNode(int data, DoublyLinkedListNode* prev,
 }
 
 // Destructor
-DoublyLinkedListNode::~DoublyLinkedListNode(void)
+template<typename T>
+DoublyLinkedListNode<T>::~DoublyLinkedListNode(void)
 {
 	m_next = NULL;
 	m_prev = NULL;
@@ -66,50 +76,58 @@ DoublyLinkedListNode::~DoublyLinkedListNode(void)
 
 // Accessors
 // GetData - returns the data stored in the node
-int DoublyLinkedListNode::GetData() const
+template<typename T>
+const T& DoublyLinkedListNode<T>::GetData() const
 {
 	return m_data;
 }
 
 // GetNext - returns the pointer to the next node
-DoublyLinkedListNode* DoublyLinkedListNode::GetNext() const
+template<typename T>
+DoublyLinkedListNode<T>* DoublyLinkedListNode<T>::GetNext() const
 {
 	return m_next;
 }
 
 // GetPrev - returns the pointer to the prevous node
-DoublyLinkedListNode* DoublyLinkedListNode::GetPrev() const
+template<typename T>
+DoublyLinkedListNode<T>* DoublyLinkedListNode<T>::GetPrev() const
 {
 	return m_prev;
 }
 
 // Mutators
 // SetData - sets the data to store in the node
-void DoublyLinkedListNode::SetData(int data)
+template<typename T>
+void DoublyLinkedListNode<T>::SetData(const T& data)
 {
 	m_data = data;
 }
 
 // SetNext - sets the pointer to the next node
-void DoublyLinkedListNode::SetNext(DoublyLinkedListNode* next)
+template<typename T>
+void DoublyLinkedListNode<T>::SetNext(DoublyLinkedListNode* next)
 {
 	m_next = next;
 }
 
 // SetPrev - sets the pointer to the previous node
-void DoublyLinkedListNode::SetPrev(DoublyLinkedListNode* prev)
+template<typename T>
+void DoublyLinkedListNode<T>::SetPrev(DoublyLinkedListNode* prev)
 {
 	m_prev = prev;
 }
 
 // operator<< - displays the node
-ostream& operator<<(ostream& sout, const DoublyLinkedListNode& curr)
+template<typename T>
+ostream& operator<<(ostream& sout, const DoublyLinkedListNode<T>& curr)
 {
 	sout << "[ (data) " << curr.m_data << " : (prev) " << curr.m_prev << " : (next) " << curr.m_next << " ]";
 	return sout;
 }
 
-DoublyLinkedListNode& DoublyLinkedListNode::operator=(const DoublyLinkedListNode& rhsNode)
+template<typename T>
+DoublyLinkedListNode<T>& DoublyLinkedListNode<T>::operator=(const DoublyLinkedListNode& rhsNode)
 {
 	m_data = rhsNode.m_data;
 	m_next = rhsNode.m_next;
@@ -118,3 +136,4 @@ DoublyLinkedListNode& DoublyLinkedListNode::operator=(const DoublyLinkedListNode
 	return *this;
 }
 
+#endif
