@@ -352,6 +352,8 @@ void RunStringTests()
 
 int main()
 {
+	DoublyLinkedList<int> first;
+	auto second = first;
 	RunIntegerTests();
 	RunStringTests();
 

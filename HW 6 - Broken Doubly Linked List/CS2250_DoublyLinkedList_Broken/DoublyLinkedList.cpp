@@ -81,13 +81,13 @@ void DoublyLinkedList<T>::AddFront( const T& item )
 		m_head = newNode;
 		// m_tail = m_head;
 	}
-	else if( m_head == m_tail &&
-		m_head != nullptr )
-	{
-		m_head = newNode;
-		m_head->SetNext( m_tail );
-		m_tail->SetPrev( m_head );
-	}
+	// else if( m_head == m_tail &&
+	// 	m_head != nullptr )
+	// {
+	// 	m_head = newNode;
+	// 	m_head->SetNext( m_tail );
+	// 	m_tail->SetPrev( m_head );
+	// }
 	else
 	{
 		m_head = newNode;
@@ -112,12 +112,12 @@ void DoublyLinkedList<T>::AddBack( const T& item )
 
 		m_tail = newNode;
 	}
-	else if( m_head == m_tail && m_head != nullptr )
-	{
-		m_tail = newNode;
-		m_head->SetNext( m_tail );
-		m_tail->SetPrev( m_head );
-	}
+	// else if( m_head == m_tail && m_head != nullptr )
+	// {
+	// 	m_tail = newNode;
+	// 	m_head->SetNext( m_tail );
+	// 	m_tail->SetPrev( m_head );
+	// }
 	else
 	{
 		m_head = newNode;
@@ -144,6 +144,8 @@ T DoublyLinkedList<T>::RemoveFront()
 		assert( m_count == 1 );
 
 		T data = m_head->GetData();
+
+		delete m_head;
 
 		m_head = nullptr;
 		m_tail = nullptr;
@@ -190,6 +192,8 @@ T DoublyLinkedList<T>::RemoveBack()
 	else if( m_head == m_tail )
 	{
 		T data = m_head->GetData();
+
+		delete m_head;
 
 		m_head = nullptr;
 		m_tail = nullptr;
@@ -407,7 +411,7 @@ template<typename T>
 DoublyLinkedList<T>& DoublyLinkedList<T>::operator=( const DoublyLinkedList& rhsList )
 {
 	// If this is NOT the same object as rs
-	if( this != &rhsList )
+	if( this != &rhsList && rhsList.m_count != 0 )
 	{
 		while( m_count > 0 )
 		{
@@ -426,6 +430,10 @@ DoublyLinkedList<T>& DoublyLinkedList<T>::operator=( const DoublyLinkedList& rhs
 			// Go to the next node
 			curr = curr->GetNext();
 		}
+	}
+	else
+	{
+
 	}
 
 	return *this;
