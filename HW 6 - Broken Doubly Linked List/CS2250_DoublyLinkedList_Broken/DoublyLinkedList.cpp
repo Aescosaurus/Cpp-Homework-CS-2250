@@ -20,28 +20,31 @@ DoublyLinkedList<T>::DoublyLinkedList()
 // the "this" list, in order
 template<typename T>
 DoublyLinkedList<T>::DoublyLinkedList( const DoublyLinkedList& list )
+	:
+	DoublyLinkedList()
 {
-	m_head = new DoublyLinkedListNode<T>( *list.m_head );
-	m_head->SetPrev( nullptr );
-	auto* cur = m_head;
-	const auto* otherCur = list.m_head;
-
-	while( m_count < list.m_count - 1 )
-	{
-		auto* temp = cur;
-
-		cur = new DoublyLinkedListNode<T>( *otherCur->GetNext() );
-		cur->SetPrev( temp );
-		temp->SetNext( cur );
-
-		++m_count;
-	}
-
-	m_tail = new DoublyLinkedListNode<T>( *list.m_tail );
-	m_tail->SetPrev( cur );
-	m_tail->GetPrev()->SetNext( m_tail );
-
-	++m_count;
+	*this = list;
+	// m_head = new DoublyLinkedListNode<T>( *list.m_head );
+	// m_head->SetPrev( nullptr );
+	// auto* cur = m_head;
+	// const auto* otherCur = list.m_head;
+	// 
+	// while( m_count < list.m_count - 1 )
+	// {
+	// 	auto* temp = cur;
+	// 
+	// 	cur = new DoublyLinkedListNode<T>( *otherCur->GetNext() );
+	// 	cur->SetPrev( temp );
+	// 	temp->SetNext( cur );
+	// 
+	// 	++m_count;
+	// }
+	// 
+	// m_tail = new DoublyLinkedListNode<T>( *list.m_tail );
+	// m_tail->SetPrev( cur );
+	// m_tail->GetPrev()->SetNext( m_tail );
+	// 
+	// ++m_count;
 }
 
 // Destructor
@@ -49,19 +52,32 @@ DoublyLinkedList<T>::DoublyLinkedList( const DoublyLinkedList& list )
 template<typename T>
 DoublyLinkedList<T>::~DoublyLinkedList()
 {
-	for( int i = 0; i < m_count - 1; ++i )
+	// for( int i = 0; i < m_count - 1; ++i )
+	// {
+	// 	DoublyLinkedListNode<T>* curr = m_head->GetNext();
+	// 
+	// 	// Delete the first node
+	// 	delete m_head;
+	// 
+	// 	// Adjust the head pointer to next node
+	// 	m_head = curr;
+	// 
+	// 	// Advance to next node
+	// 	curr = curr->GetNext();
+	// }
+	DoublyLinkedListNode<T>* curNode = m_head;
+
+	while( curNode != nullptr )
 	{
-		DoublyLinkedListNode<T>* curr = m_head->GetNext();
+		auto* temp = curNode;
 
-		// Delete the first node
-		delete m_head;
+		curNode = curNode->GetNext();
 
-		// Adjust the head pointer to next node
-		m_head = curr;
-
-		// Advance to next node
-		curr = curr->GetNext();
+		delete temp;
 	}
+
+	m_head = nullptr;
+	m_tail = nullptr;
 }
 
 // AddFront - adds the item to the front of the list
@@ -413,10 +429,7 @@ DoublyLinkedList<T>& DoublyLinkedList<T>::operator=( const DoublyLinkedList& rhs
 	// If this is NOT the same object as rs
 	if( this != &rhsList && rhsList.m_count != 0 )
 	{
-		while( m_count > 0 )
-		{
-			RemoveFront();
-		}
+		while( m_count > 0 ) RemoveFront();
 
 		// Iterator for parameter list, start at first node
 		DoublyLinkedListNode<T>* curr = rhsList.m_head;

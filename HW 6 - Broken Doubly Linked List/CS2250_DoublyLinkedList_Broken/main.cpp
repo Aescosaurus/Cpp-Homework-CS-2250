@@ -352,8 +352,15 @@ void RunStringTests()
 
 int main()
 {
-	DoublyLinkedList<int> first;
-	auto second = first;
+	DoublyLinkedList<int> origList;
+	origList.AddFront( 1 );
+	origList.AddFront( 2 );
+	origList.AddFront( 3 );
+	origList.AddFront( 4 );
+	origList.AddFront( 5 );
+
+	DoublyLinkedList<int> newList = origList;
+
 	RunIntegerTests();
 	RunStringTests();
 
