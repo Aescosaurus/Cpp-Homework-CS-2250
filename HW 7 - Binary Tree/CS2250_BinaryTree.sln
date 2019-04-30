@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryTreeLibrary", "CS2250_BinaryTreeLecture\CS2250_BinaryTreeLecture.vcxproj", "{FC4FE3E4-A5E0-485E-A762-FBB1C984E851}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryTreeTests", "BinaryTreeTests\BinaryTreeTests.vcxproj", "{6B4845DF-B738-4DA2-B571-2B1A6D342707}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FC4FE3E4-A5E0-485E-A762-FBB1C984E851} = {FC4FE3E4-A5E0-485E-A762-FBB1C984E851}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryTreeMain", "BinaryTreeMain\BinaryTreeMain.vcxproj", "{56B6BD72-33E6-42FF-85CF-053CCE0B1E03}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FC4FE3E4-A5E0-485E-A762-FBB1C984E851} = {FC4FE3E4-A5E0-485E-A762-FBB1C984E851}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC4FE3E4-A5E0-485E-A762-FBB1C984E851}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FC4FE3E4-A5E0-485E-A762-FBB1C984E851}.Debug|Win32.Build.0 = Debug|Win32
+		{FC4FE3E4-A5E0-485E-A762-FBB1C984E851}.Release|Win32.ActiveCfg = Release|Win32
+		{FC4FE3E4-A5E0-485E-A762-FBB1C984E851}.Release|Win32.Build.0 = Release|Win32
+		{6B4845DF-B738-4DA2-B571-2B1A6D342707}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6B4845DF-B738-4DA2-B571-2B1A6D342707}.Debug|Win32.Build.0 = Debug|Win32
+		{6B4845DF-B738-4DA2-B571-2B1A6D342707}.Release|Win32.ActiveCfg = Release|Win32
+		{6B4845DF-B738-4DA2-B571-2B1A6D342707}.Release|Win32.Build.0 = Release|Win32
+		{56B6BD72-33E6-42FF-85CF-053CCE0B1E03}.Debug|Win32.ActiveCfg = Debug|Win32
+		{56B6BD72-33E6-42FF-85CF-053CCE0B1E03}.Debug|Win32.Build.0 = Debug|Win32
+		{56B6BD72-33E6-42FF-85CF-053CCE0B1E03}.Release|Win32.ActiveCfg = Release|Win32
+		{56B6BD72-33E6-42FF-85CF-053CCE0B1E03}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
