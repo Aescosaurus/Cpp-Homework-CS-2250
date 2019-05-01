@@ -122,9 +122,7 @@ bool BinaryTree::Search( const string& item,BinaryTreeNode* curr ) const
 // Returns true if the remove was successful, false otherwise.
 bool BinaryTree::Remove( const string& item )
 {
-	// TODO: Add your code here
-
-	return false;
+	return( Remove( item,root ) );
 }
 
 // Remove
@@ -134,9 +132,43 @@ bool BinaryTree::Remove( const string& item )
 // fixes the parent's pointer to the removed node.
 bool BinaryTree::Remove( const string& item,BinaryTreeNode* curr )
 {
-	// TODO: Add your code here
+	static BinaryTreeNode* prev;
 
-	return false;
+	if( curr == nullptr )
+	{
+		return( false );
+	}
+	else if( curr == root && curr->GetData() == item )
+	{
+		delete root;
+		root = nullptr;
+		return( true );
+	}
+	else if( curr->GetData() == item )
+	{
+		if( prev->GetLeft() == curr )
+		{
+			prev->SetLeft( RemoveNode( curr ) );
+		}
+		else if( prev->GetRight() == curr )
+		{
+			prev->SetRight( RemoveNode( curr ) );
+		}
+		else
+		{
+			// You will never get this.
+			const auto bop = 'a';
+		}
+
+		return( true );
+	}
+	else
+	{
+		prev = curr;
+
+		if( item > curr->GetData() ) return( Remove( item,curr->GetRight() ) );
+		else return( Remove( item,curr->GetLeft() ) );
+	}
 }
 
 // RemoveNode
@@ -146,9 +178,38 @@ bool BinaryTree::Remove( const string& item,BinaryTreeNode* curr )
 // If curr had no children, null is returned.
 BinaryTreeNode* BinaryTree::RemoveNode( BinaryTreeNode* curr )
 {
-	// TODO: Add your code here
-
-	return NULL;
+	if( curr->GetLeft() == nullptr &&
+		curr->GetRight() == nullptr )
+	{
+		return( nullptr );
+	}
+	else if( curr->GetLeft() == nullptr )
+	{
+		delete curr;
+		return( curr->GetRight() );
+	}
+	else if( curr->GetRight() == nullptr )
+	{
+		delete curr;
+		return( curr->GetLeft() );
+	}
+	else
+	{
+		auto* temp = curr;
+		auto* prev = curr;
+		if( temp->GetRight() != nullptr )
+		{
+			temp = temp->GetRight();
+			while( temp->GetLeft() != nullptr )
+			{
+				prev = temp;
+				temp = temp->GetLeft();
+			}
+		}
+		// curr->SetData( temp->GetData() );
+		delete curr;
+		return( temp );
+	}
 }
 
 /////////////////////////////////////////////////////////////////
