@@ -6,13 +6,15 @@
 ////////////////////////////////////////////////////////////////////////////
 // DO NOT USE THE BELOW IN YOUR CODE - THESE ARE FOR THE TESTING SUITE ONLY
 ////////////////////////////////////////////////////////////////////////////
-int BinaryTreeNode::nbrNodes = 0;
+template<typename T>
+int BinaryTreeNode<T>::nbrNodes = 0;
 
 // GetNbrNodes
 // Returns the number of nodes created since the application started
 // DO NOT CALL THIS FUNCTION IN YOUR CODE - USED ONLY BY THE TESTING CODE
 
-int BinaryTreeNode::GetNbrNodes()
+template<typename T>
+int BinaryTreeNode<T>::GetNbrNodes()
 {
 	return nbrNodes;
 }
@@ -20,7 +22,8 @@ int BinaryTreeNode::GetNbrNodes()
 // ResetNbrNodes
 // Resets the number of nodes to zero
 // DO NOT CALL THIS FUNCTION IN YOUR CODE - USED ONLY BY THE TESTING CODE
-void BinaryTreeNode::ResetNbrNodes()
+template<typename T>
+void BinaryTreeNode<T>::ResetNbrNodes()
 {
 	nbrNodes = 0;
 }
@@ -31,7 +34,8 @@ void BinaryTreeNode::ResetNbrNodes()
 // BinaryTreeNode Constructor
 // Store the item in the node
 // Set it to have no children
-BinaryTreeNode::BinaryTreeNode(const string& item)
+template<typename T>
+BinaryTreeNode<T>::BinaryTreeNode(const T& item)
 {
 	data = item;
 	right = NULL;
@@ -42,7 +46,8 @@ BinaryTreeNode::BinaryTreeNode(const string& item)
 }
 
 // Copy constructor
-BinaryTreeNode::BinaryTreeNode(const BinaryTreeNode& node)
+template<typename T>
+BinaryTreeNode<T>::BinaryTreeNode(const BinaryTreeNode& node)
 {
 	data = node.data;
 	right = node.right;
@@ -55,70 +60,80 @@ BinaryTreeNode::BinaryTreeNode(const BinaryTreeNode& node)
 // BinaryTreeNode Destructor
 // Delete each child.  This recursively
 // calls the destructor "down" the tree
-BinaryTreeNode::~BinaryTreeNode()
+template<typename T>
+BinaryTreeNode<T>::~BinaryTreeNode()
 {
 	--nbrNodes;
 }
 
 // GetLeft
 // Returns a pointer to the left child
-BinaryTreeNode* BinaryTreeNode::GetLeft() const
+template<typename T>
+BinaryTreeNode<T>* BinaryTreeNode<T>::GetLeft() const
 {
 	return left;
 }
 
 // GetRight
 // REturns a pointer to the right child
-BinaryTreeNode* BinaryTreeNode::GetRight() const
+template<typename T>
+BinaryTreeNode<T>* BinaryTreeNode<T>::GetRight() const
 {
 	return right;
 }
 
 // GetData
 // Returns the data associated with the node
-string BinaryTreeNode::GetData() const
+template<typename T>
+T BinaryTreeNode<T>::GetData() const
 {
 	return data;
 }
 
 // GetHeight
 // Returns the height of the node
-int BinaryTreeNode::GetHeight() const
+template<typename T>
+int BinaryTreeNode<T>::GetHeight() const
 {
 	return height;
 }
 
 // SetLeft
 // Sets the left child
-void BinaryTreeNode::SetLeft(BinaryTreeNode* left)
+template<typename T>
+void BinaryTreeNode<T>::SetLeft(BinaryTreeNode* left)
 {
 	this->left = left;
 }
 
 // SetRight
 // Sets the right child
-void BinaryTreeNode::SetRight(BinaryTreeNode* right)
+template<typename T>
+void BinaryTreeNode<T>::SetRight(BinaryTreeNode* right)
 {
 	this->right = right;
 }
 
 // SetData
 // Sets the data of the node
-void BinaryTreeNode::SetData(const string& data)
+template<typename T>
+void BinaryTreeNode<T>::SetData(const T& data)
 {
 	this->data = data;
 }
 
 // SetHeight
 // Sets the height of the node
-void BinaryTreeNode::SetHeight(int height)
+template<typename T>
+void BinaryTreeNode<T>::SetHeight(int height)
 {
 	this->height = height;
 }
 
 // Insertion Operator
 // displays the node's data
-ostream& operator<<(ostream& sout, const BinaryTreeNode& node)
+template<typename T>
+ostream& operator<<(ostream& sout, const BinaryTreeNode<T>& node)
 {
 	sout << node.GetData();
 	return sout;

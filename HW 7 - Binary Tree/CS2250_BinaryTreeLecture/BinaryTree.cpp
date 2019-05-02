@@ -5,7 +5,8 @@
 
 // BinaryTree Constructor
 // Initialize the tree to empty
-BinaryTree::BinaryTree( bool isAVL )
+template<typename T>
+BinaryTree<T>::BinaryTree( bool isAVL )
 {
 	isAVLTree = isAVL;
 	root = NULL;
@@ -14,14 +15,16 @@ BinaryTree::BinaryTree( bool isAVL )
 // BinaryTree Destructor
 // Deletes the root node.
 // Relies on Node's delete method.
-BinaryTree::~BinaryTree( void )
+template<typename T>
+BinaryTree<T>::~BinaryTree( void )
 {
 	MakeEmpty( root );
 }
 
 // MakeEmpty
 // Recurses the entire tree, 
-void BinaryTree::MakeEmpty( BinaryTreeNode* curr )
+template<typename T>
+void BinaryTree<T>::MakeEmpty( BinaryTreeNode<T>* curr )
 {
 	if( curr != nullptr )
 	{
@@ -40,11 +43,12 @@ void BinaryTree::MakeEmpty( BinaryTreeNode* curr )
 // Public Insert adds the item into the tree.
 // If the tree is empty, adds the item as the root.
 // Otherwise, uses the private insert to recursively insert.
-void BinaryTree::Insert( const string& item )
+template<typename T>
+void BinaryTree<T>::Insert( const T& item )
 {
 	if( root == nullptr )
 	{
-		root = new BinaryTreeNode( item );
+		root = new BinaryTreeNode<T>( item );
 	}
 	else Insert( item,root );
 }
@@ -55,13 +59,14 @@ void BinaryTree::Insert( const string& item )
 // to the left subtree.  If the item is greater, it is
 // added to the right subtree.  If there is no subtree,
 // the node is added as a child of this node.
-void BinaryTree::Insert( const string& item,BinaryTreeNode* curr )
+template<typename T>
+void BinaryTree<T>::Insert( const T& item,BinaryTreeNode<T>* curr )
 {
 	if( item > curr->GetData() )
 	{
 		if( curr->GetRight() == nullptr )
 		{
-			curr->SetRight( new BinaryTreeNode( item ) );
+			curr->SetRight( new BinaryTreeNode<T>( item ) );
 		}
 		else Insert( item,curr->GetRight() );
 	}
@@ -69,7 +74,7 @@ void BinaryTree::Insert( const string& item,BinaryTreeNode* curr )
 	{
 		if( curr->GetLeft() == nullptr )
 		{
-			curr->SetLeft( new BinaryTreeNode( item ) );
+			curr->SetLeft( new BinaryTreeNode<T>( item ) );
 		}
 		else Insert( item,curr->GetLeft() );
 	}
@@ -83,7 +88,8 @@ void BinaryTree::Insert( const string& item,BinaryTreeNode* curr )
 // Public Search method that uses the private version to search
 // from the root.  Returns TRUE if the item is found.  Returns 
 // FALSE if the tree is empty or if the item is not found.
-bool BinaryTree::Search( const string& item ) const
+template<typename T>
+bool BinaryTree<T>::Search( const T& item ) const
 {
 	return( Search( item,root ) );
 }
@@ -95,7 +101,8 @@ bool BinaryTree::Search( const string& item ) const
 // the item, then the search is exhausted and the item
 // was not found.
 // Returns TRUE if the item is found, FALSE if not. 
-bool BinaryTree::Search( const string& item,BinaryTreeNode* curr ) const
+template<typename T>
+bool BinaryTree<T>::Search( const T& item,BinaryTreeNode<T>* curr ) const
 {
 	if( curr == nullptr )
 	{
@@ -120,9 +127,23 @@ bool BinaryTree::Search( const string& item,BinaryTreeNode* curr ) const
 // The public versrion of Remove that initiates the recursive
 // search for the item to remove.
 // Returns true if the remove was successful, false otherwise.
-bool BinaryTree::Remove( const string& item )
+template<typename T>
+bool BinaryTree<T>::Remove( const T& item )
 {
-	return( Remove( item,root ) );
+	if( root == nullptr )
+	{
+		return( false );
+	}
+	if( root->GetData() == item )
+	{
+		root = RemoveNode( root );
+		// root = nullptr;
+		return( true );
+	}
+	else
+	{
+		return( Remove( item,root ) );
+	}
 }
 
 // Remove
@@ -130,42 +151,25 @@ bool BinaryTree::Remove( const string& item )
 // to remove. Returns true if the removal was successful, false otherwise.
 // Uses RemoveNode to actually remove the node of the item once found and 
 // fixes the parent's pointer to the removed node.
-bool BinaryTree::Remove( const string& item,BinaryTreeNode* curr )
+template<typename T>
+bool BinaryTree<T>::Remove( const T& item,BinaryTreeNode<T>* curr )
 {
-	static BinaryTreeNode* prev;
-
 	if( curr == nullptr )
 	{
 		return( false );
 	}
-	else if( curr == root && curr->GetData() == item )
+	else if( curr->GetLeft() != nullptr &&
+		curr->GetLeft()->GetData() == item )
 	{
-		delete root;
-		root = nullptr;
-		return( true );
+		curr->SetLeft( RemoveNode( curr->GetLeft() ) );
 	}
-	else if( curr->GetData() == item )
+	else if( curr->GetRight() != nullptr &&
+		curr->GetRight()->GetData() == item )
 	{
-		if( prev->GetLeft() == curr )
-		{
-			prev->SetLeft( RemoveNode( curr ) );
-		}
-		else if( prev->GetRight() == curr )
-		{
-			prev->SetRight( RemoveNode( curr ) );
-		}
-		else
-		{
-			// You will never get this.
-			const auto bop = 'a';
-		}
-
-		return( true );
+		curr->SetRight( RemoveNode( curr->GetRight() ) );
 	}
 	else
 	{
-		prev = curr;
-
 		if( item > curr->GetData() ) return( Remove( item,curr->GetRight() ) );
 		else return( Remove( item,curr->GetLeft() ) );
 	}
@@ -176,39 +180,51 @@ bool BinaryTree::Remove( const string& item,BinaryTreeNode* curr )
 // place in the revised tree.  Returns the node that should take
 // curr's place in the tree with restructured children as appropriate.
 // If curr had no children, null is returned.
-BinaryTreeNode* BinaryTree::RemoveNode( BinaryTreeNode* curr )
+template<typename T>
+BinaryTreeNode<T>* BinaryTree<T>::RemoveNode( BinaryTreeNode<T>* curr )
 {
 	if( curr->GetLeft() == nullptr &&
 		curr->GetRight() == nullptr )
 	{
+		delete curr;
 		return( nullptr );
 	}
 	else if( curr->GetLeft() == nullptr )
 	{
+		auto* temp = curr->GetRight();
 		delete curr;
-		return( curr->GetRight() );
+		return( temp );
 	}
 	else if( curr->GetRight() == nullptr )
 	{
+		auto* temp = curr->GetLeft();
 		delete curr;
-		return( curr->GetLeft() );
+		return( temp );
 	}
 	else
 	{
-		auto* temp = curr;
-		auto* prev = curr;
-		if( temp->GetRight() != nullptr )
+		auto* min = curr;
+		auto* parent = curr;
+		min = min->GetRight();
+		while( min->GetLeft() != nullptr )
 		{
-			temp = temp->GetRight();
-			while( temp->GetLeft() != nullptr )
-			{
-				prev = temp;
-				temp = temp->GetLeft();
-			}
+			parent = min;
+			min = min->GetLeft();
 		}
-		// curr->SetData( temp->GetData() );
-		delete curr;
-		return( temp );
+		curr->SetData( min->GetData() );
+		if( parent->GetLeft() == min )
+		{
+			parent->SetLeft( min->GetRight() );
+			// parent->SetRight( nullptr );
+		}
+		else if( parent->GetRight() == min )
+		{
+			parent->SetRight( min->GetRight() );
+		}
+		delete min;
+		min = nullptr;
+		// delete curr;
+		return( curr );
 	}
 }
 
@@ -231,7 +247,8 @@ BinaryTreeNode* BinaryTree::RemoveNode( BinaryTreeNode* curr )
 // at its children and grandchildren.  If there is a difference in
 // height between the left and right child that is greater than 1,
 // the node needs to be rebalanced.  False otherwise.
-bool BinaryTree::NeedsRebalancing( BinaryTreeNode* curr )
+template<typename T>
+bool BinaryTree<T>::NeedsRebalancing( BinaryTreeNode<T>* curr )
 {
 	// TODO: Add your code here for week 2
 
@@ -243,7 +260,8 @@ bool BinaryTree::NeedsRebalancing( BinaryTreeNode* curr )
 // grandchildren as required based on which type of rotation
 // is necessary (left-left, right-right, right-left or left-right).
 // Returns the new node that should replace curr in the tree.
-BinaryTreeNode* BinaryTree::RebalanceNode( BinaryTreeNode* curr )
+template<typename T>
+BinaryTreeNode<T>* BinaryTree<T>::RebalanceNode( BinaryTreeNode<T>* curr )
 {
 	// TODO: Add your code here for week 2
 
@@ -253,7 +271,8 @@ BinaryTreeNode* BinaryTree::RebalanceNode( BinaryTreeNode* curr )
 // FixHeight
 // Fixes the height of curr by looking at the height of its
 // chilren and taking the larger height and adding one.
-void BinaryTree::FixHeight( BinaryTreeNode* curr )
+template<typename T>
+void BinaryTree<T>::FixHeight( BinaryTreeNode<T>* curr )
 {
 	// TODO: Add your code here for week 2
 
@@ -274,7 +293,8 @@ void BinaryTree::FixHeight( BinaryTreeNode* curr )
 
 // IsAVL
 // Returns true if the tree is an AVL tree and false otherwise
-bool BinaryTree::IsAVL() const
+template<typename T>
+bool BinaryTree<T>::IsAVL() const
 {
 	return isAVLTree;
 }
@@ -285,21 +305,24 @@ bool BinaryTree::IsAVL() const
 
 // InOrderPrint
 // Public version of InOrderPrint, intializes the recursion
-void BinaryTree::InOrderPrint( ostream& sout ) const
+template<typename T>
+void BinaryTree<T>::InOrderPrint( ostream& sout ) const
 {
 	InOrderPrint( sout,root );
 }
 
 // PreOrderPrint
 // Public version of PreOrderPrint, intializes the recursion
-void BinaryTree::PreOrderPrint( ostream& sout ) const
+template<typename T>
+void BinaryTree<T>::PreOrderPrint( ostream& sout ) const
 {
 	PreOrderPrint( sout,root );
 }
 
 // PostOrderPrint
 // Public version of PostOrderPrint, intializes the recursion
-void BinaryTree::PostOrderPrint( ostream& sout ) const
+template<typename T>
+void BinaryTree<T>::PostOrderPrint( ostream& sout ) const
 {
 	PostOrderPrint( sout,root );
 }
@@ -307,7 +330,8 @@ void BinaryTree::PostOrderPrint( ostream& sout ) const
 // InOrderPrint
 // Prints the tree in order (left child, current
 // node, right child).
-void BinaryTree::InOrderPrint( ostream& sout,BinaryTreeNode* curr ) const
+template<typename T>
+void BinaryTree<T>::InOrderPrint( ostream& sout,BinaryTreeNode<T>* curr ) const
 {
 	// If the current Node exists
 	if( curr == NULL )
@@ -336,7 +360,8 @@ void BinaryTree::InOrderPrint( ostream& sout,BinaryTreeNode* curr ) const
 // PreOrderPrint
 // Prints the tree in pre-order (current node, left child,
 // right child).
-void BinaryTree::PreOrderPrint( ostream& sout,BinaryTreeNode* curr ) const
+template<typename T>
+void BinaryTree<T>::PreOrderPrint( ostream& sout,BinaryTreeNode<T>* curr ) const
 {
 	// If the current Node exists
 	if( curr == NULL )
@@ -366,7 +391,8 @@ void BinaryTree::PreOrderPrint( ostream& sout,BinaryTreeNode* curr ) const
 // PostOrderPrint
 // Prints the tree "post-order".  Prints
 // the left subtree, prints the right subree, then the current node.
-void BinaryTree::PostOrderPrint( ostream& sout,BinaryTreeNode* curr ) const
+template<typename T>
+void BinaryTree<T>::PostOrderPrint( ostream& sout,BinaryTreeNode<T>* curr ) const
 {
 	// If the current Node exists
 	if( curr == NULL )
@@ -399,7 +425,8 @@ void BinaryTree::PostOrderPrint( ostream& sout,BinaryTreeNode* curr ) const
 
 // Insertion Operator
 // Display the tree using an in-order print
-ostream& operator<<( ostream& sout,const BinaryTree& tree )
+template<typename T>
+ostream& operator<< <>( ostream& sout,const BinaryTree<T>& tree )
 {
 	sout << "PreOrderPrint:   ";
 	tree.PreOrderPrint( sout,tree.root );

@@ -48,7 +48,7 @@ int nbrFailed = 0;
 void TestTree(string test, string nodes[], int nbrNodes, string output[], bool isAVL = false)
 {
 	// TODO: change this into a templated tree based on strings
-	BinaryTree* tree = new BinaryTree(isAVL);
+	BinaryTree<string>* tree = new BinaryTree<string>(isAVL);
 	string testName = "";
 
 	cout << "************************************************************************" << endl;
@@ -60,8 +60,8 @@ void TestTree(string test, string nodes[], int nbrNodes, string output[], bool i
 	for (int i = 0; i < nbrNodes; ++i)
 	{
 		tree->Insert(nodes[i]);
-		testName = "Inserting " + nodes[i] + " NumberOfNodes = " + to_string(BinaryTreeNode::GetNbrNodes());
-		string result = ((BinaryTreeNode::GetNbrNodes() == (i + 1)) ? "PASSED" : "FAILED");
+		testName = "Inserting " + nodes[i] + " NumberOfNodes = " + to_string(BinaryTreeNode<string>::GetNbrNodes());
+		string result = ((BinaryTreeNode<string>::GetNbrNodes() == (i + 1)) ? "PASSED" : "FAILED");
 		if (result == "FAILED") ++nbrFailed;
 		cout << left << setw(testNameSize) << testName << result << endl;
 		cout << *tree << endl;
@@ -107,8 +107,8 @@ void TestTree(string test, string nodes[], int nbrNodes, string output[], bool i
 		result = (tree->Remove(nodes[i]) ? "PASSED" : "FAILED");
 		if (result == "FAILED") ++nbrFailed;
 		cout << left << setw(testNameSize) << testName << result << endl;
-		testName = "Number of Nodes = " + to_string(BinaryTreeNode::GetNbrNodes());
-		result = ((BinaryTreeNode::GetNbrNodes() == (nbrNodes - i - 1)) ? "PASSED" : "FAILED");
+		testName = "Number of Nodes = " + to_string(BinaryTreeNode<string>::GetNbrNodes());
+		result = ((BinaryTreeNode<string>::GetNbrNodes() == (nbrNodes - i - 1)) ? "PASSED" : "FAILED");
 		if (result == "FAILED") ++nbrFailed;
 		cout << left << setw(testNameSize) << testName << result << endl;
 	}
@@ -204,7 +204,7 @@ void TestTemplatedTree(string test, int size, bool isAVL = false)
 void RunTests()
 {
 	// Test normal trees
-	TestTree("smallRootOnlyTree", smallRootOnlyTree, 1, smallRootOnlyTreeOutput);
+	// TestTree("smallRootOnlyTree", smallRootOnlyTree, 1, smallRootOnlyTreeOutput);
 	TestTree("smallSimpleTree", smallSimpleTree, 3, smallSimpleTreeOutput);
 	TestTree("smallFullTree", smallFullTree, 7, smallFullTreeOutput);
 
