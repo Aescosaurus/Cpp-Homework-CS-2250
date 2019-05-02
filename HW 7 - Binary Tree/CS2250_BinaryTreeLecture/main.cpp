@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "BinaryTree.h"
-#include "Trophy.h"
+// #include "Trophy.h"
 
 using namespace std;
 
@@ -118,7 +118,6 @@ void TestTree(string test, string nodes[], int nbrNodes, string output[], bool i
 }
 
 // TODO: Once you've added templates, uncomment this code
-/*
 ////////////////////////////////////////////////////////////////////////////////
 // Template Tests
 // Uncomment this portion of the file to test your templated BinaryTree on ints
@@ -199,12 +198,11 @@ void TestTemplatedTree(string test, int size, bool isAVL = false)
 	delete tree;
 	cout << endl;
 }
-*/
 
 void RunTests()
 {
 	// Test normal trees
-	// TestTree("smallRootOnlyTree", smallRootOnlyTree, 1, smallRootOnlyTreeOutput);
+	TestTree("smallRootOnlyTree", smallRootOnlyTree, 1, smallRootOnlyTreeOutput);
 	TestTree("smallSimpleTree", smallSimpleTree, 3, smallSimpleTreeOutput);
 	TestTree("smallFullTree", smallFullTree, 7, smallFullTreeOutput);
 
@@ -223,7 +221,6 @@ void RunTests()
 	TestTree("largeTreeAVL", largeTree, 25, largeTreeOutputAVL, true);
 
 	// TODO: Once you've added templates, uncomment this code
-	/*
 	////////////////////////////////////////////////////////////////////////////////
 	// Template Tests
 	// Uncomment this portion of the file to test your templated BinaryTree on ints
@@ -234,7 +231,6 @@ void RunTests()
 	TestTemplatedTree("FifteenIntegerTemplateTree", 15);
 	TestTemplatedTree("TwentyFiveIntegerTemplateTree", 25);
 	TestTemplatedTree("FiftyIntegerTemplateTree", 50);
-	*/
 }
 
 int main()

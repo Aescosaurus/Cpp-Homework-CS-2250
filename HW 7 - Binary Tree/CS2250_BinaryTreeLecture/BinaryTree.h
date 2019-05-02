@@ -25,7 +25,7 @@ public:
 	bool Search(const T& item) const;
 	bool Remove(const T& item);
 
-	friend ostream& operator<<(ostream& sout, const BinaryTree& tree);
+	friend ostream& operator<< <>(ostream& sout, const BinaryTree& tree);
 
 	void InOrderPrint(ostream& sout) const;
 	void PreOrderPrint(ostream& sout) const;
